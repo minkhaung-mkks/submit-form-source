@@ -1,26 +1,14 @@
 import React, { useMemo, useState } from "react";
 import "../form.css";
+import { useRef } from "react";
 export default function SimpleProfileForm() {
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [gender, setGender] = useState("other");
   const [submitted, setSubmitted] = useState(false);
-  const [hobbies, setHobbies] = useState({
-    music: false,
-    movies: false,
-    plasticModel: false,
-  });
   const [role, setRole] = useState("general staff");
-
-  const hobbyList = useMemo(() => {
-    const list = [];
-    if (hobbies.music) list.push("Music");
-    if (hobbies.movies) list.push("Movies");
-    if (hobbies.plasticModel) list.push("Plastic Model");
-    return list;
-  }, [hobbies]);
-
+  const hobbyRef = useRef([])
   return (
     <div className="form_box">
       {!submitted ? (
@@ -93,30 +81,21 @@ export default function SimpleProfileForm() {
             <label>
               <input
                 type="checkbox"
-                checked={hobbies.music}
-                onChange={(e) =>
-                  setHobbies((p) => ({ ...p, music: e.target.checked }))
-                }
+                ref={el => hobbyRef.current[0] = el}
               />
               <span>Music</span>
             </label>
             <label>
               <input
                 type="checkbox"
-                checked={hobbies.movies}
-                onChange={(e) =>
-                  setHobbies((p) => ({ ...p, movies: e.target.checked }))
-                }
+                ref={el => hobbyRef.current[1] = el}
               />
               <span>Movies</span>
             </label>
             <label>
               <input
                 type="checkbox"
-                checked={hobbies.plasticModel}
-                onChange={(e) =>
-                  setHobbies((p) => ({ ...p, plasticModel: e.target.checked }))
-                }
+                ref={el => hobbyRef.current[2] = el}
               />
               <span>Plastic Model</span>
             </label>
@@ -158,7 +137,10 @@ export default function SimpleProfileForm() {
             </div>
             <div className="summary_item">
               <label>Hobbies:</label>
-              <span>{hobbyList.length ? hobbyList.join(", ") : ""}</span>
+              <span>    {hobbyRef.current
+    .map((el) => (el?.checked ? el?.nextElementSibling?.textContent?.trim() : null))
+    .filter(Boolean)
+    .join(", ")}</span>
             </div>
             <div className="summary_item">
               <label>Role:</label>
