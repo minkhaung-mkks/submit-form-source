@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/submit-page">
+        <Route path="/submit-form">
           <Route index element={  <SimpleProfileForm/>} />
         </Route>
       </Routes>
